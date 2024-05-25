@@ -27,6 +27,7 @@ app.use('/users', usersRouter);
 // MongoDB
 mongoose.set('strictQuery', false);
 const mongoDB = "database"
+// Just checking
 
 main().catch((err) => console.log(err));
 async function main() {
