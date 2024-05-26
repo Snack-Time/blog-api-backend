@@ -3,8 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const dotenv = require('dotenv')
-const mongoose = require('mongoose')
+require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -25,9 +24,9 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // MongoDB
+const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
-const mongoDB = "database"
-// Just checking
+const mongoDB = process.env.DB_KEY
 
 main().catch((err) => console.log(err));
 async function main() {
