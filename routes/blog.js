@@ -7,8 +7,10 @@ router.get('/posts', blog_controller.get_posts_list);
 
 router.post('/posts', blog_controller.create_post);
 
-router.get('/posts/:id', blog_controller.get_post);
+router.get('/posts/:postid', blog_controller.get_post);
 
-router.put('/posts/:id', blog_controller.update_post);
+router.put('/posts/:postid', blog_controller.update_post);
 
-router.delete('/posts/:id', blog_controller.delete_post);
+router.delete('/posts/:postid', blog_controller.delete_post);
+
+module.exports = router;
