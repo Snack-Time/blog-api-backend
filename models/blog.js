@@ -7,7 +7,7 @@ const BlogSchema = new Schema({
     title: { type: String, required: true },
     content: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    date_published: { type: Date, required: true },
+    date_published: { type: Date, default: Date.now, required: true },
     date_edited: { type: Date },
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment', required: true }]
 })

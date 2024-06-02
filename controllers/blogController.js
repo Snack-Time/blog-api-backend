@@ -13,9 +13,27 @@ exports.get_post = asyncHandler(async (req, res, next) => {
     res.send("NOT IMPLEMENTED: GET SINGULAR POST")
 });
 
-exports.create_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: CREATE A POST")
-});
+exports.create_post = [
+    body('title', 'Title cannot be blank or exceed 50 characters!')
+    .trim()
+    .notEmpty()
+    .isString()
+    .isLength({ min: 1, max: 50 }),
+
+    body('content', 'Content cannot be blank!')
+    .trim()
+    .notEmpty()
+    .isString(),
+
+    asyncHandler(async (req, res, next) => {
+        const errors = validationResult(req);
+        const blog = new Blog({
+            title: req.body.title,
+            content: req.body.content,
+            comments: [],
+        });
+    
+})];
 
 exports.update_post = asyncHandler(async (req, res, next) => {
     res.send("NOT IMPLEMENTED: UPDATE POST")
