@@ -13,15 +13,15 @@ const BlogSchema = new Schema({
 })
 
 BlogSchema.virtual('url').get(function () {
-    // code something here
+    return `/posts/${this._id}`;
 });
 
 BlogSchema.virtual('date_pub_formatted').get(function() {
-    // code luxon thing here
+    return DateTime.fromJSDate(this.date_published).toLocaleString(DateTime.DATETIME_FULL);
 });
 
 BlogSchema.virtual('date_edit_formatted').get(function() {
-    // code luxon thing here
+    return DateTime.fromJSDate(this.date_edited).toLocaleString(DateTime.DATETIME_FULL);
 });
 
 module.exports = mongoose.model('Blog', BlogSchema);
