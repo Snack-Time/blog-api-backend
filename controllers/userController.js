@@ -79,7 +79,10 @@ exports.create_user = [
 })];
 
 exports.update_user = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: UPDATE POST")
+    let userToUpdate = await User.findById(req.params.id);
+    userToUpdate.status = "Author";
+    await User.findByIdAndUpdate(req.params.id, userToUpdate);
+    res.json(userToUpdate);
 });
 
 exports.delete_user = asyncHandler(async (req, res, next) => {
