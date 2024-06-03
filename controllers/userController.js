@@ -81,8 +81,8 @@ exports.create_user = [
 exports.update_user = asyncHandler(async (req, res, next) => {
     let userToUpdate = await User.findById(req.params.id);
     userToUpdate.status = "Author";
-    await User.findByIdAndUpdate(req.params.id, userToUpdate);
-    res.json(userToUpdate);
+    let updatedUser = await User.findByIdAndUpdate(req.params.id, userToUpdate);
+    res.json(updatedUser);
 });
 
 exports.delete_user = asyncHandler(async (req, res, next) => {
