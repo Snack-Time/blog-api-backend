@@ -27,12 +27,23 @@ exports.create_post = [
 
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
+        const testUser = await User.findOne({ username: "WilliamMcNally" })
         const blog = new Blog({
             title: req.body.title,
             content: req.body.content,
+            author: testUser,
             comments: [],
         });
     
+        console.log(errors)
+        if (!errors.isEmpty()) {
+            res.send(errors)
+            return
+        }
+        else {
+            await blog.save();
+            res.send('Blog post successfully made')
+        }
 })];
 
 exports.update_post = asyncHandler(async (req, res, next) => {
