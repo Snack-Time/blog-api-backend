@@ -53,7 +53,3 @@ exports.update_post = asyncHandler(async (req, res, next) => {
 exports.delete_post = asyncHandler(async (req, res, next) => {
     res.send("NOT IMPLEMENTED: DELETE POST")
 });
-
-exports.get_posts_by_user = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: GET POSTS BY A USER")
-})

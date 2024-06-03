@@ -16,6 +16,10 @@ router.put('/:id', user_controller.update_user);
 
 router.delete('/:id', user_controller.delete_user);
 
+// USER + BLOG ROUTES
+
+router.get('/:id/posts', user_controller.get_posts_by_user);
+
 // USER + COMMENTS ROUTES
 
 // router.get('/users/:userid/comments', comment_controller.get_comments_by_user) [BREAKS EVERYTHING CURRENTLY]

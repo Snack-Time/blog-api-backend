@@ -90,3 +90,7 @@ exports.delete_user = asyncHandler(async (req, res, next) => {
     await User.findByIdAndDelete(req.params.id);
     res.send(`${userToDelete.username} successfully deleted.`);
 });
+
+exports.get_posts_by_user = asyncHandler(async (req, res, next) => {
+    res.send("NOT IMPLEMENTED: GET POSTS BY A USER")
+});

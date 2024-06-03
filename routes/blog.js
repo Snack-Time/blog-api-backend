@@ -16,10 +16,6 @@ router.put('/:id', blog_controller.update_post);
 
 router.delete('/:id', blog_controller.delete_post);
 
-// BLOG AND USER ROUTES
-
-router.get('/:userid', blog_controller.get_posts_by_user);
-
 // BLOG AND COMMENT ROUTES
 
 router.post('/:id/comments', comment_controller.create_comment_on_post);
