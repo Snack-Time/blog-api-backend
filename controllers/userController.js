@@ -12,7 +12,8 @@ exports.get_user = asyncHandler(async (req, res, next) => {
 });
 
 exports.get_all_users = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: GET LIST OF USERS")
+    let userList = await User.find({});
+    res.json(userList);
 });
 
 exports.create_user = [
