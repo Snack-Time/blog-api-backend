@@ -86,5 +86,7 @@ exports.update_user = asyncHandler(async (req, res, next) => {
 });
 
 exports.delete_user = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: DELETE POST")
+    let userToDelete = await User.findById(req.params.id);
+    await User.findByIdAndDelete(req.params.id);
+    res.send(`${userToDelete.username} successfully deleted.`);
 });
