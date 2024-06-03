@@ -6,7 +6,8 @@ const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
 
 exports.get_posts_list = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: GET ALL POSTS")
+    let postList = await Blog.find({}).populate('author');
+    res.json(postList);
 });
 
 exports.get_post = asyncHandler(async (req, res, next) => {
@@ -27,7 +28,7 @@ exports.create_post = [
 
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
-        const testUser = await User.findOne({ username: "WilliamMcNally" })
+        const testUser = await User.findOne({ username: "Kaientai" })
         const blog = new Blog({
             title: req.body.title,
             content: req.body.content,
