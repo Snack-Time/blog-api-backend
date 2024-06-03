@@ -7,7 +7,8 @@ const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcrypt')
 
 exports.get_user = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: GET A USER")
+    let user = await User.findById(req.params.id);
+    res.json(user);
 });
 
 exports.get_all_users = asyncHandler(async (req, res, next) => {
