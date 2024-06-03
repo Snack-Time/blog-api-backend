@@ -52,5 +52,7 @@ exports.update_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.delete_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: DELETE POST")
+    let postToDelete = await Blog.findById(req.params.id);
+    await Blog.findByIdAndDelete(req.params.id);
+    res.send(`${postToDelete.title} successfully deleted.`);
 });

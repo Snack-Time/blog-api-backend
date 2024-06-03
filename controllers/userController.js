@@ -92,5 +92,6 @@ exports.delete_user = asyncHandler(async (req, res, next) => {
 });
 
 exports.get_posts_by_user = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: GET POSTS BY A USER")
+    let postList = await Blog.find({author: req.params.id}).populate('author');
+    res.json(postList);
 });
