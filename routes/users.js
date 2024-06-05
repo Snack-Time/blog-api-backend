@@ -22,6 +22,6 @@ router.get('/:id/posts', user_controller.get_posts_by_user);
 
 // USER + COMMENTS ROUTES
 
-// router.get('/users/:userid/comments', comment_controller.get_comments_by_user) [BREAKS EVERYTHING CURRENTLY]
+router.get('/:id/comments', comment_controller.get_comments_by_user)
 
 module.exports = router;

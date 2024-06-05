@@ -24,3 +24,7 @@ exports.delete_comment = asyncHandler(async (req, res, next) => {
 exports.update_comment = asyncHandler(async (req, res, next) => {
     res.send("NOT IMPLEMENTED: EDIT A COMMENT")
 });
+
+exports.get_comments_by_user = asyncHandler(async (req, res, next) => {
+    res.send("NOT IMPLEMENTED: GET COMMENTS BY USER")
+});
