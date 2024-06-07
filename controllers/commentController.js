@@ -9,9 +9,34 @@ exports.get_comments_on_post = asyncHandler(async (req, res, next) => {
     res.send("NOT IMPLEMENTED: GET COMMENTS ON POST")
 });
 
-exports.create_comment_on_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: CREATE A COMMENT")
-});
+exports.create_comment_on_post = [
+    body('content', 'Comment cannot be blank!')
+    .trim()
+    .notEmpty()
+    .isString(),
+    
+    asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    const testUser = await User.findOne({ username: "Kaientai" });
+    const blog = await Blog.findById(req.params.id)
+    const comment = new Comment({
+        content: req.body.content,
+        user: testUser,
+        reference_post: req.params.id,
+    })
+
+    console.log(errors)
+    if (!errors.isEmpty()) {
+        res.send(errors)
+        return
+    }
+    else {
+        await comment.save()
+        blog.comments.push(comment)
+        await blog.save()
+        res.send('Comment successfully posted')
+    }
+})]
 
 exports.get_comment = asyncHandler(async (req, res, next) => {
     res.send("NOT IMPLEMENTED: GET A SPECIFIC COMMENT")
