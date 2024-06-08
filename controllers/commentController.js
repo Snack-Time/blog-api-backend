@@ -57,9 +57,33 @@ exports.delete_comment = asyncHandler(async (req, res, next) => {
     res.send('Comment successfully deleted')
 });
 
-exports.update_comment = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: EDIT A COMMENT")
-});
+exports.update_comment = [
+    body('content', 'Comment cannot be blank!')
+    .trim()
+    .notEmpty()
+    .isString(),
+    
+    asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    const oldComment = await Comment.findById(req.params.commentid)
+    const newComment = {
+        content: req.body.content,
+        user: oldComment.user,
+        reference_post: oldComment.reference_post,
+        timestamp: oldComment.timestamp,
+        edit_timestamp: Date.now()
+    }
+
+    console.log(errors)
+    if (!errors.isEmpty()) {
+        res.send(errors)
+        return
+    }
+    else {
+        await Comment.findByIdAndUpdate(req.params.commentid, newComment)
+        res.send('Comment successfully updated')
+    }
+})];
 
 exports.get_comments_by_user = asyncHandler(async (req, res, next) => {
     let allCommentsByUser = await Comment.find({ user: req.params.id }).exec();
