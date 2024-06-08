@@ -6,7 +6,8 @@ const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
 
 exports.get_comments_on_post = asyncHandler(async (req, res, next) => {
-    res.send('hiroshi tanahashi')
+    const blog = await Blog.findById(req.params.id).populate('comments')
+    res.json(blog.comments)
 });
 
 exports.create_comment_on_post = [
@@ -44,7 +45,16 @@ exports.get_comment = asyncHandler(async (req, res, next) => {
 });
 
 exports.delete_comment = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: DELETE A COMMENT")
+    
+    // remove reference from post
+    let blogArray = await Blog.findById(req.params.id)
+    let index = blogArray.comments.indexOf(`${req.params.commentid}`)
+    blogArray.comments.splice(index, 1)
+    await blogArray.save()
+    
+    // remove comment
+    await Comment.findByIdAndDelete(req.params.commentid)
+    res.send('Comment successfully deleted')
 });
 
 exports.update_comment = asyncHandler(async (req, res, next) => {
@@ -52,5 +62,6 @@ exports.update_comment = asyncHandler(async (req, res, next) => {
 });
 
 exports.get_comments_by_user = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: GET COMMENTS BY USER")
+    let allCommentsByUser = await Comment.find({ user: req.params.id }).exec();
+    res.json(allCommentsByUser)
 });

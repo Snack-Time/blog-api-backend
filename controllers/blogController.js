@@ -6,7 +6,7 @@ const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
 
 exports.get_posts_list = asyncHandler(async (req, res, next) => {
-    let postList = await Blog.find({}).populate('author');
+    let postList = await Blog.find({}).populate('author comments');
     res.json(postList);
 });
 
