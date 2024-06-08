@@ -6,7 +6,7 @@ const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
 
 exports.get_comments_on_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: GET COMMENTS ON POST")
+    res.send('hiroshi tanahashi')
 });
 
 exports.create_comment_on_post = [
@@ -39,7 +39,8 @@ exports.create_comment_on_post = [
 })]
 
 exports.get_comment = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: GET A SPECIFIC COMMENT")
+    const comment = await Comment.findById(req.params.commentid)
+    res.json(comment)
 });
 
 exports.delete_comment = asyncHandler(async (req, res, next) => {
