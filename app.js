@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require('dotenv').config();
+const passport = require('passport');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -33,6 +34,19 @@ const mongoDB = process.env.DB_KEY
 main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
+}
+
+// Verify Token
+function verifyToken(req, res, next) {
+  // Get Auth Header
+  const bearerHeader = req.headers['authorization']
+
+  if(typeof bearerHeader !== 'undefined') {
+
+  }
+  else {
+    res.sendStatus(403)
+  }
 }
 
 // catch 404 and forward to error handler

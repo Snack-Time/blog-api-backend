@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcrypt');
+const verifyToken = require('../config/verifyToken');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -25,10 +26,21 @@ router.post('/sign-in', async function(req, res, next) {
     return res.status(401).json({errors: 'Incorrect Password'})
   }
 
-  const token = jwt.sign({ user }, 'secretkey', {
+  const token = jwt.sign({ user }, process.env.USER_TOKEN, {
     expiresIn: "1d",
   })
   res.status(200).json({ user, token })
+})
+
+router.get('/test', verifyToken, (req, res) => {
+  jwt.verify(req.token, process.env.USER_TOKEN, (err, authData) => {
+    if (err) {
+      res.sendStatus(403)
+    }
+    else {
+      res.json({message: "Yellow", authData})
+    }
+  });
 })
 
 module.exports = router;
