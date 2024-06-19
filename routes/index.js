@@ -6,6 +6,8 @@ const User = require('../models/user');
 const Comment = require('../models/comment');
 
 const jwt = require('jsonwebtoken');
+const passport = require('passport')
+
 const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcrypt');
@@ -27,20 +29,13 @@ router.post('/sign-in', async function(req, res, next) {
   }
 
   const token = jwt.sign({ user }, process.env.USER_TOKEN, {
-    expiresIn: "1d",
+    expiresIn: "1h",
   })
   res.status(200).json({ user, token })
 })
 
 router.get('/test', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.USER_TOKEN, (err, authData) => {
-    if (err) {
-      res.sendStatus(403)
-    }
-    else {
-      res.json({message: "Yellow", authData})
-    }
+      res.json(req.authData)
   });
-})
 
 module.exports = router;

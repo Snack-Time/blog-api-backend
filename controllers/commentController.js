@@ -5,6 +5,8 @@ const { body, validationResult } = require('express-validator');
 
 const asyncHandler = require('express-async-handler');
 
+const verifyToken = require('../config/verifyToken');
+
 exports.get_comments_on_post = asyncHandler(async (req, res, next) => {
     const blog = await Blog.findById(req.params.id).populate('comments')
     res.json(blog.comments)
@@ -18,13 +20,13 @@ exports.create_comment_on_post = [
     
     asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
-    const testUser = await User.findOne({ username: "Kaientai" });
-    const blog = await Blog.findById(req.params.id)
+    const userData = req.authData;
+    const blog = await Blog.findById(req.params.id);
     const comment = new Comment({
         content: req.body.content,
-        user: testUser,
+        user: userData.user._id,
         reference_post: req.params.id,
-    })
+    });
 
     console.log(errors)
     if (!errors.isEmpty()) {
