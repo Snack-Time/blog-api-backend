@@ -1,6 +1,4 @@
 const Blog = require('../models/blog');
-const User = require('../models/user');
-const Comment = require('../models/comment');
 const { body, validationResult } = require('express-validator');
 
 const asyncHandler = require('express-async-handler');
@@ -29,13 +27,18 @@ exports.create_post = [
 
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
-        const testUser = await User.findOne({ username: "Kaientai" })
+        const user = req.authData.user
         const blog = new Blog({
             title: req.body.title,
             content: req.body.content,
-            author: testUser,
+            author: user,
             comments: [],
         });
+
+        if (req.userStatus !== "Author") {
+            res.send("Blog post not sent: User is not an Author")
+            return
+        }
     
         console.log(errors)
         if (!errors.isEmpty()) {
@@ -62,6 +65,7 @@ exports.update_post = [
 
     asyncHandler(async (req, res, next) => {
         let postToUpdate = await Blog.findById(req.params.id);
+        let user = req.authData.user
         const errors = validationResult(req);
         postToUpdate = ({
             title: req.body.title,
@@ -71,6 +75,11 @@ exports.update_post = [
             date_published: postToUpdate.date_published,
             date_edited: Date.now(),
         });
+
+        if (postToUpdate.author.toString() !== user._id) {
+            res.send("Authorization failed: Post needs to be updated by original author.")
+            return
+        }
     
         console.log(errors)
         if (!errors.isEmpty()) {
@@ -85,6 +94,13 @@ exports.update_post = [
 
 exports.delete_post = asyncHandler(async (req, res, next) => {
     let postToDelete = await Blog.findById(req.params.id);
+    let user = req.authData.user;
+    
+    if (postToDelete.author.toString() !== user._id) {
+        res.send("Authorization failed: Post needs to be deleted by original author.")
+        return
+    }
+
     await Blog.findByIdAndDelete(req.params.id);
     res.send(`${postToDelete.title} successfully deleted.`);
 });
