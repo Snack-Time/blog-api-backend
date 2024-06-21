@@ -4,15 +4,15 @@ const Comment = require('../models/comment');
 
 const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
 
 exports.get_user = asyncHandler(async (req, res, next) => {
-    let user = await User.findById(req.params.id);
+    let user = await User.findById(req.params.id, "username email status");
     res.json(user);
 });
 
 exports.get_all_users = asyncHandler(async (req, res, next) => {
-    let userList = await User.find({});
+    let userList = await User.find({}, "username email status");
     res.json(userList);
 });
 
@@ -82,7 +82,7 @@ exports.update_user = asyncHandler(async (req, res, next) => {
     let userToUpdate = await User.findById(req.params.id);
     userToUpdate.status = "Author";
     let updatedUser = await User.findByIdAndUpdate(req.params.id, userToUpdate);
-    res.json(updatedUser);
+    res.send(`${updatedUser.username} status updated to Author`);
 });
 
 exports.delete_user = asyncHandler(async (req, res, next) => {
@@ -92,6 +92,6 @@ exports.delete_user = asyncHandler(async (req, res, next) => {
 });
 
 exports.get_posts_by_user = asyncHandler(async (req, res, next) => {
-    let postList = await Blog.find({author: req.params.id}).populate('author');
+    let postList = await Blog.find({author: req.params.id}).populate('author', 'username email status');
     res.json(postList);
 });
