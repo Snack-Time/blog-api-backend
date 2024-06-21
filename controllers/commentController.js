@@ -52,7 +52,7 @@ exports.delete_comment = asyncHandler(async (req, res, next) => {
     
     // check if end user is either Author or the original commenter
     if (blog.author.toString() !== user._id || comment.user.toString() !== user._id) {
-        res.json({"authError": "Authorization failed: Comment needs to be deleted by original author or author of blog post."})
+        res.json({"authError": "Authorization failed: Comment needs to be deleted by original user or the author of parent blog post."})
         return
     }
     
@@ -73,8 +73,17 @@ exports.update_comment = [
     .isString(),
     
     asyncHandler(async (req, res, next) => {
-    const errors = validationResult(req);
+    
+    let user = req.authData.user;
     const oldComment = await Comment.findById(req.params.commentid)
+    
+    // check if end user is the original commenter
+    if (oldComment.user.toString() !== user._id) {
+        res.json({"authError": "Authorization failed: Comment needs to be updated by original user."})
+        return
+    }
+    
+    const errors = validationResult(req);
     const newComment = {
         content: req.body.content,
         user: oldComment.user,
