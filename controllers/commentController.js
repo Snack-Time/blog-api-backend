@@ -5,8 +5,6 @@ const { body, validationResult } = require('express-validator');
 
 const asyncHandler = require('express-async-handler');
 
-const verifyToken = require('../config/verifyToken');
-
 exports.get_comments_on_post = asyncHandler(async (req, res, next) => {
     const blog = await Blog.findById(req.params.id).populate('comments')
     res.json(blog.comments)
@@ -48,11 +46,20 @@ exports.get_comment = asyncHandler(async (req, res, next) => {
 
 exports.delete_comment = asyncHandler(async (req, res, next) => {
     
+    let user = req.authData.user;
+    let blog = await Blog.findById(req.params.id)
+    let comment = await Comment.findById(req.params.commentid)
+    
+    // check if end user is either Author or the original commenter
+    if (blog.author.toString() !== user._id || comment.user.toString() !== user._id) {
+        res.json({"authError": "Authorization failed: Comment needs to be deleted by original author or author of blog post."})
+        return
+    }
+    
     // remove reference from post
-    let blogArray = await Blog.findById(req.params.id)
-    let index = blogArray.comments.indexOf(`${req.params.commentid}`)
-    blogArray.comments.splice(index, 1)
-    await blogArray.save()
+    let index = blog.comments.indexOf(`${req.params.commentid}`)
+    blog.comments.splice(index, 1)
+    await blog.save()
     
     // remove comment
     await Comment.findByIdAndDelete(req.params.commentid)
